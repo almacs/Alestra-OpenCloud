@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created by TIBCO WSDL-->
+<wsdl:definitions xmlns:tns="http://www.tibco.com/namespaces/2005/bw/staffware-serviceagent/__sol_SharedConfigurations_sol_iProcessServiceAgent" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns0="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" xmlns:jms="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:jndi="http://www.tibco.com/namespaces/ws/2004/soap/apis/jndi" name="__sol_SharedConfigurations_sol_iProcessServiceAgentWSDL" targetNamespace="http://www.tibco.com/namespaces/2005/bw/staffware-serviceagent/__sol_SharedConfigurations_sol_iProcessServiceAgent">
+    <wsdl:documentation>TIBCO BusinessWorks iProcessServiceAgent: /SharedConfigurations/iProcessServiceAgent - 2015-10-15 01:05</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ns="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+            <xs:simpleType name="ErrorCodeType">
+                <xs:restriction base="xs:integer"/>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorMessageType">
+                <xs:restriction base="xs:string"/>
+            </xs:simpleType>
+            <xs:complexType name="GenericFaultType">
+                <xs:sequence>
+                    <xs:element name="ErrorCode" type="ns:ErrorCodeType"/>
+                    <xs:element name="ErrorMessage" type="ns:ErrorMessageType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="HPSCAProvisioningRequestType">
+                <xs:all>
+                    <xs:element name="Accion" type="xs:string" minOccurs="0"/>
+                    <xs:element name="BillAccount" type="xs:string" minOccurs="0"/>
+                    <xs:element name="Datacenter" type="xs:string" minOccurs="0"/>
+                    <xs:element name="DelayedReleaseID" type="xs:string" minOccurs="0"/>
+                    <xs:element name="IDCSA" type="xs:string" minOccurs="0"/>
+                    <xs:element name="IDTIBCO" type="xs:string" minOccurs="0"/>
+                    <xs:element name="LlaveServicio" type="xs:string" minOccurs="0"/>
+                    <xs:element name="Nombre" type="xs:string" minOccurs="0"/>
+                    <xs:element name="Orden" type="xs:string" minOccurs="0"/>
+                    <xs:element name="Proyecto" type="xs:string" minOccurs="0"/>
+                    <xs:element name="vBandWidth" type="xs:string" minOccurs="0"/>
+                    <xs:element name="vCPU" type="xs:string" minOccurs="0"/>
+                    <xs:element name="vMemoria" type="xs:string" minOccurs="0"/>
+                    <xs:element name="vStorage" type="xs:string" minOccurs="0"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:complexType name="HPSCAProvisioningResponseType">
+                <xs:sequence>
+                    <xs:element name="errorCode" type="xs:string"/>
+                    <xs:element name="errorDescription" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ReceiveHPSCAReplyRequestType">
+                <xs:sequence>
+                    <xs:element name="IDCSA" type="xs:string"/>
+                    <xs:element name="usuario" type="xs:string"/>
+                    <xs:element name="clave" type="xs:string"/>
+                    <xs:element name="zona" type="xs:string"/>
+                    <xs:element name="estatus" type="xs:string"/>
+                    <xs:element name="FLEXFIELD1" type="xs:string"/>
+                    <xs:element name="FLEXFIELD2" type="xs:string"/>
+                    <xs:element name="FLEXFIELD3" type="xs:string"/>
+                    <xs:element name="FLEXFIELD4" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ReceiveHPSCAReplyResponseType">
+                <xs:sequence>
+                    <xs:element name="IDCSA" type="xs:string"/>
+                    <xs:element name="estatus" type="xs:integer"/>
+                    <xs:element name="descripcion" type="xs:string"/>
+                    <xs:element name="IDTIBCO" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="HPSCAProvisioningFault" type="ns:GenericFaultType"/>
+            <xs:element name="HPSCAProvisioningRequest" type="ns:HPSCAProvisioningRequestType"/>
+            <xs:element name="HPSCAProvisioningResponse" type="ns:HPSCAProvisioningResponseType"/>
+            <xs:element name="ReceiveHPSCAReplyFault" type="ns:GenericFaultType"/>
+            <xs:element name="ReceiveHPSCAReplyRequest" type="ns:ReceiveHPSCAReplyRequestType"/>
+            <xs:element name="ReceiveHPSCAReplyResponse" type="ns:ReceiveHPSCAReplyResponseType"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Request">
+        <wsdl:part name="param" element="ns0:HPSCAProvisioningRequest"/>
+    </wsdl:message>
+    <wsdl:message name="__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Response">
+        <wsdl:part name="return" element="ns0:HPSCAProvisioningResponse"/>
+    </wsdl:message>
+    <wsdl:message name="__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Fault0">
+        <wsdl:part name="error" element="ns0:HPSCAProvisioningFault"/>
+    </wsdl:message>
+    <wsdl:portType name="__sol_SharedConfigurations_sol_iProcessServiceAgent">
+        <wsdl:operation name="__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning">
+            <wsdl:input message="tns:__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Request"/>
+            <wsdl:output message="tns:__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Response"/>
+            <wsdl:fault name="_Fault0" message="tns:__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Fault0"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="__sol_SharedConfigurations_sol_iProcessServiceAgentServiceBinding" type="tns:__sol_SharedConfigurations_sol_iProcessServiceAgent">
+        <soap:binding style="document" transport="http://www.tibco.com/namespaces/ws/2004/soap/binding/JMS"/>
+        <jms:binding messageFormat="Text"/>
+        <wsdl:operation name="__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning">
+            <soap:operation style="document" soapAction="/Processes/StarterProcesses/HPSCAProvisioning.process"/>
+            <wsdl:input>
+                <soap:body use="literal" parts="param"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" parts="return"/>
+            </wsdl:output>
+            <wsdl:fault name="__sol_Processes_sol_StarterProcesses_sol_HPSCAProvisioning_Fault0">
+                <soap:fault use="literal" name="_Fault0"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="__sol_SharedConfigurations_sol_iProcessServiceAgentService">
+        <wsdl:port name="__sol_SharedConfigurations_sol_iProcessServiceAgentServiceJMSPort" binding="tns:__sol_SharedConfigurations_sol_iProcessServiceAgentServiceBinding">
+            <soap:address location="tibjmsnaming://172.26.50.94:41201"/>
+            <jndi:context>
+                <jndi:property name="java.naming.factory.initial" type="java.lang.String">com.tibco.tibjms.naming.TibjmsInitialContextFactory</jndi:property>
+                <jndi:property name="java.naming.provider.url" type="java.lang.String">tibjmsnaming://172.26.50.94:41201</jndi:property>
+            </jndi:context>
+            <jms:connectionFactory>QueueConnectionFactory</jms:connectionFactory>
+            <jms:targetAddress destination="queue">ALS.PRD.SO.ALPBilling.02</jms:targetAddress>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

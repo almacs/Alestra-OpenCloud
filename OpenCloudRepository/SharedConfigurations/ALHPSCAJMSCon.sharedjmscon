@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>ALHPSCAJMSCon</name>
+    <resourceType>ae.shared.JMSConnectionKey</resourceType>
+    <config>
+        <NamingEnvironment>
+            <UseJNDI>true</UseJNDI>
+            <ProviderURL>%%GVJMS/Connection/ProviderURL%%</ProviderURL>
+            <NamingURL>%%GVJMS/Connection/JNDIURL%%</NamingURL>
+            <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+            <TopicFactoryName>TopicConnectionFactory</TopicFactoryName>
+            <QueueFactoryName>QueueConnectionFactory</QueueFactoryName>
+            <NamingPrincipal>%%GVJMS/Connection/UserName%%</NamingPrincipal>
+            <NamingCredential>%%GVJMS/Connection/Password%%</NamingCredential>
+        </NamingEnvironment>
+        <ConnectionAttributes>
+            <username>%%GVJMS/Connection/UserName%%</username>
+            <password>%%GVJMS/Connection/Password%%</password>
+            <clientID/>
+            <autoGenClientID>true</autoGenClientID>
+        </ConnectionAttributes>
+        <UseXACF>false</UseXACF>
+    </config>
+</BWSharedResource>

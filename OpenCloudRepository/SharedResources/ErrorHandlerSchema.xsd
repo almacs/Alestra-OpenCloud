@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="ERR_CODE" type="xs:string"/>
+	<xs:element name="ERROR_MSG" type="xs:string"/>
+	<xs:element name="EXCEPTION">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="REQUEST_ID" minOccurs="0"/>
+				<xs:element ref="CASE_NUMBER" minOccurs="0"/>
+				<xs:element ref="STEP_NAME" minOccurs="0"/>
+				<xs:element ref="PROC_NAME" minOccurs="0"/>
+				<xs:element ref="INTERFACE" minOccurs="0"/>
+				<xs:element ref="ERROR_MSG" minOccurs="0"/>
+				<xs:element ref="ERROR_DATE" minOccurs="0"/>
+				<xs:element ref="SOURCE" minOccurs="0"/>
+				<xs:element ref="STATUS" minOccurs="0"/>
+				<xs:element ref="ERR_CODE" minOccurs="0"/>
+				<xs:element ref="SI_OR_SE_ID" minOccurs="0"/>
+				<xs:element ref="PROJECT_ID" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ROOT">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="EXCEPTION" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="SOURCE" type="xs:string"/>
+	<xs:element name="STEP_NAME" type="xs:string"/>
+	<xs:element name="REQUEST_ID" type="xs:string"/>
+	<xs:element name="CASE_NUMBER" type="xs:string"/>
+	<xs:element name="INTERFACE" type="xs:string"/>
+	<xs:element name="ERROR_DATE" type="xs:string"/>
+	<xs:element name="STATUS" type="xs:string"/>
+	<xs:element name="PROC_NAME" type="xs:string"/>
+	<xs:element name="SI_OR_SE_ID" type="xs:string"/>
+	<xs:element name="PROJECT_ID" type="xs:string"/>
+</xs:schema>

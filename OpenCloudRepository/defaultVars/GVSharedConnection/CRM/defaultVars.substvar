@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>EnterpriseServer</name>
+			<value>En_Sieb78Prd</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1438731799449</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Host</name>
+			<value>siebelserver</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1438731799449</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>ObjectManager</name>
+			<value>EAIObjMgr_enu</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1438731799449</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>T0BC1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1438731799450</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UserName</name>
+			<value>TIBCO</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1438731799450</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

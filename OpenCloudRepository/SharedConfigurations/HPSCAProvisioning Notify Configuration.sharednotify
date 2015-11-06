@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:pfx="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd">
+    <import namespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" schemaLocation="/Schemas/OpenCloud/OpenCloud.xsd"/>
+    <name>HPSCAProvisioning Notify Configuration</name>
+    <resourceType>ae.shared.notifySharedConfig</resourceType>
+    <description>To spawn the async process</description>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <localOnly>false</localOnly>
+        <xsdString ref="pfx:HPSCAProvisioningRequest"/>
+    </config>
+</BWSharedResource>

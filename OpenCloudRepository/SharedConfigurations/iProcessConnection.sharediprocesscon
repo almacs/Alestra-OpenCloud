@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>iProcessConnection</name>
+    <resourceType>ae.shared.iProcessConnection</resourceType>
+    <config>
+        <ServerDiscovery>1</ServerDiscovery>
+        <ServerName>%%GVSharedConnection/iProcessConnection/ObjectServerName%%</ServerName>
+        <ComputerName/>
+        <IPAddress>%%GVSharedConnection/iProcessConnection/IPAddress%%</IPAddress>
+        <UDPPortNumber>%%GVSharedConnection/iProcessConnection/UDPPort%%</UDPPortNumber>
+        <TCPPortNumber>%%GVSharedConnection/iProcessConnection/TCPPort%%</TCPPortNumber>
+        <IsDirector>1</IsDirector>
+        <UserName>%%GVSharedConnection/iProcessConnection/UserName%%</UserName>
+        <UserPassword>%%GVSharedConnection/iProcessConnection/Password%%</UserPassword>
+        <DatabaseConnectionType>0</DatabaseConnectionType>
+        <DatabaseMaxConnection>10</DatabaseMaxConnection>
+        <DatabaseLoginTimeout>0</DatabaseLoginTimeout>
+        <DatabaseOperationTimeout>10</DatabaseOperationTimeout>
+        <AutoDataBaseConfig>false</AutoDataBaseConfig>
+        <DatabaseType>1</DatabaseType>
+        <JDBCDriverName>%%GVSharedConnection/iProcessDBConn/JDBCDriver%%</JDBCDriverName>
+        <XADataSourceName/>
+        <DatabaseURL>%%GVSharedConnection/iProcessDBConn/URL%%</DatabaseURL>
+        <DatabaseUserName>%%GVSharedConnection/iProcessDBConn/UserName%%</DatabaseUserName>
+        <DatabasePassword>%%GVSharedConnection/iProcessDBConn/Password%%</DatabasePassword>
+        <AdminUserName>%%GVSharedConnection/iProcessDBConn/SchemaOwner%%</AdminUserName>
+        <CustomDateFormat>true</CustomDateFormat>
+        <DateFormat>0</DateFormat>
+        <DateSeparator>/</DateSeparator>
+        <TimeSeparator>:</TimeSeparator>
+    </config>
+</BWSharedResource>

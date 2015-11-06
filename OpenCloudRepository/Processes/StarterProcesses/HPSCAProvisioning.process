@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns12="http://xmlns.example.com/unique/default/namespace/1103228635369" xmlns:pfx="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" schemaLocation="/Schemas/OpenCloud/OpenCloud.xsd"/>
+    <pd:name>Processes/StarterProcesses/HPSCAProvisioning.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:HPSCAProvisioningRequest"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>54</pd:startY>
+    <pd:returnBindings>
+        <pfx:HPSCAProvisioningResponse>
+            <pfx:IDCSA>
+                <xsl:value-of select="$Start/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+            </pfx:IDCSA>
+            <pfx:estatus>
+                <xsl:value-of select="&quot;0&quot;"/>
+            </pfx:estatus>
+            <pfx:descripcion>
+                <xsl:value-of select="&quot;Success&quot;"/>
+            </pfx:descripcion>
+            <pfx:IDTIBCO>
+                <xsl:value-of select="$Start/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+            </pfx:IDTIBCO>
+        </pfx:HPSCAProvisioningResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:HPSCAProvisioningResponse"/>
+    <pd:endX>857</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas>
+        <Schema1 ref="pfx:HPSCAProvisioningFault"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd</pd:targetNamespace>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>632</pd:x>
+        <pd:y>187</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($_error)"/>
+                </message>
+                <xsl:if test="$_error/ns:ErrorReport/MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$_error/ns:ErrorReport/MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>83</pd:x>
+        <pd:y>182</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Notify">
+        <pd:type>com.tibco.plugin.waitnotify.NotifyActivity</pd:type>
+        <pd:resourceType>ae.activities.notifyActivity</pd:resourceType>
+        <pd:x>469</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <sharedConfig>/SharedConfigurations/HPSCAProvisioning Notify Configuration.sharednotify</sharedConfig>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <xsl:copy-of select="$Start/pfx:HPSCAProvisioningRequest"/>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="StarterLogger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>192</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="1"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/GVUtilityServices/Logging/DEBUG"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="'Cease of NRC&quot;'"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="&quot;Process/WebServiceCalls/CeaseCharges;&quot;"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  'HPSCAProvisioning',&quot;||&quot;,'HPSCAProvisioning')"/>
+                </ns12:BusinessReferenceID>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>337</pd:x>
+        <pd:y>57</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Start, true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Request&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent-2">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>598</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Start,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Response&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="EndLogger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>726</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="1"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/GVUtilityServices/Logging/DEBUG"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="&quot;End of Discount Cease&quot;"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="&quot;Processes/StarterProcesses/HPSCAProvisioning&quot;"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  'HPSCAProvisioning',&quot;||&quot;,'HPSCAProvisioning')"/>
+                </ns12:BusinessReferenceID>
+                <ns12:FlexField1>
+                    <xsl:value-of select="concat(&quot;Web Service Response:: &quot;,$Start)"/>
+                </ns12:FlexField1>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error Logger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>232</pd:x>
+        <pd:y>188</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="'2'"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/GVUtilityServices/Logging/ERROR"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="&quot;Error at 'HPSCAProvisioning'&quot;"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="&quot;'HPSCAProvisioning'&quot;"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  'HPSCAProvisioning',&quot;||&quot;,&quot;SI_ID=&quot;,'HPSCAProvisioning')"/>
+                </ns12:BusinessReferenceID>
+                <ns12:MsgContents>
+                    <xsl:value-of select="tib:render-xml($_error)"/>
+                </ns12:MsgContents>
+                <ns12:FlexField1>
+                    <xsl:value-of select="tib:render-xml($_error)"/>
+                </ns12:FlexField1>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>409</pd:x>
+        <pd:y>190</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($_error,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="'HPSCAProvisioning'"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Error&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>StarterLogger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Error Logger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notify</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Logger</pd:from>
+        <pd:to>WriteEvent-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent-1</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>StarterLogger</pd:from>
+        <pd:to>WriteEvent</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent</pd:from>
+        <pd:to>Notify</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent-2</pd:from>
+        <pd:to>EndLogger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>EndLogger</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

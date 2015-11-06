@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://www.tibco.com/schemas/test1/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/ns/no_namespace_schema_location/Shared Resources/ErrorHandlerSchema.xsd" xmlns:pfx4="http://www.tibco.com/schemas/zorro_26apr2008/Shared Resources/Schema.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/schemas/ProfileLines_25apr2008/Shared Resources/Schema.xsd" xmlns:pfx2="http://www.tibco.com/schemas/ProfileCards_26apr2008/Shared Connections/Schema1.xsd" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/ErrorHandlerSchema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/test1/Schema.xsd" schemaLocation="/Shared Resources/Schema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/ProfileCards_26apr2008/Shared Connections/Schema1.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/zorro_26apr2008/Shared Resources/Schema.xsd" schemaLocation="/Shared Resources/ErrorSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/zorro_26apr2008/Shared Resources/Schema.xsd" schemaLocation="/SharedResources/ErrorSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Shared Resources/ErrorHandlerSchema.xsd" schemaLocation="/Shared Resources/ErrorHandlerSchema.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/ErrorHandlerSchema.xsd" schemaLocation="/SharedResources/ErrorHandlerSchema.xsd"/>
+    <pd:name>Utilities/ErrorHandling/ErrorSubProcess.process</pd:name>
+    <pd:startName>ErrorStart</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx6:EXCEPTION"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>111</pd:startX>
+    <pd:startY>138</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>541</pd:endX>
+    <pd:endY>145</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1387448571364</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>232</pd:x>
+        <pd:y>63</pd:y>
+        <pd:width>197</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>errorLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:errorCondition>false()</pd:errorCondition>
+            <pd:suspendAfterErrorRetry>false</pd:suspendAfterErrorRetry>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>EHFJMSQueueSender</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>EHFJMSQueueSender</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="EHFJMSQueueSender">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:x>321</pd:x>
+            <pd:y>138</pd:y>
+            <config>
+                <PermittedMessageType>XML Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%GVCompanyName%%.%%GVEnv%%.%%GVUtilityServices/ErrorHandling/QueueErrorHandler%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedConfigurations/ErrorJMSConnection.sharedjmscon</ConnectionReference>
+                <InDataxsdString ref="pfx6:ROOT"/>
+            </config>
+            <pd:inputBindings>
+                <ns:ActivityInput>
+                    <Body>
+                        <ROOT>
+                            <xsl:for-each select="$ErrorStart/root/EXCEPTION">
+                                <EXCEPTION>
+                                    <REQUEST_ID>
+                                        <xsl:value-of select="REQUEST_ID"/>
+                                    </REQUEST_ID>
+                                    <CASE_NUMBER>
+                                        <xsl:value-of select="CASE_NUMBER"/>
+                                    </CASE_NUMBER>
+                                    <STEP_NAME>
+                                        <xsl:value-of select="STEP_NAME"/>
+                                    </STEP_NAME>
+                                    <PROC_NAME>
+                                        <xsl:value-of select="PROC_NAME"/>
+                                    </PROC_NAME>
+                                    <INTERFACE>
+                                        <xsl:value-of select="INTERFACE"/>
+                                    </INTERFACE>
+                                    <ERROR_MSG>
+                                        <xsl:value-of select="ERROR_MSG"/>
+                                    </ERROR_MSG>
+                                    <ERROR_DATE>
+                                        <xsl:value-of select="tib:format-dateTime('yyyy-MM-dd HH:mm:ss', current-dateTime())"/>
+                                    </ERROR_DATE>
+                                    <SOURCE>
+                                        <xsl:value-of select="SOURCE"/>
+                                    </SOURCE>
+                                    <STATUS>
+                                        <xsl:value-of select="STATUS"/>
+                                    </STATUS>
+                                    <ERR_CODE>
+                                        <xsl:value-of select="ERR_CODE"/>
+                                    </ERR_CODE>
+                                    <SI_OR_SE_ID>
+                                        <xsl:value-of select="SI_OR_SE_ID"/>
+                                    </SI_OR_SE_ID>
+                                    <PROJECT_ID>
+                                        <xsl:value-of select="PROJECT_ID"/>
+                                    </PROJECT_ID>
+                                </EXCEPTION>
+                            </xsl:for-each>
+                        </ROOT>
+                    </Body>
+                </ns:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorStart</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

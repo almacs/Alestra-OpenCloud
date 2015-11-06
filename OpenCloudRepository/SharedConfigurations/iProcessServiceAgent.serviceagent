@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>iProcessServiceAgent</name>
+    <resourceType>ae.shared.iProcessServiceAgent</resourceType>
+    <config>
+        <class>com.tibco.plugin.staffware.iProcessServiceAgentResource</class>
+        <AcknowledgeMode>1</AcknowledgeMode>
+        <MaxSessions>1</MaxSessions>
+        <JMSConnection>/SharedConfigurations/ALHPSCAJMSCon.sharedjmscon</JMSConnection>
+        <DestinationQueue>%%GVCompanyName%%.%%GVEnv%%.%%GVInterface%%.%%GVJMS/QueueName/OpenCloud%%</DestinationQueue>
+        <SchemaFileLocation>C:\tibco\Repo\OpenCloudRepository\InterfaceFiles\OpenCloudiProcessInterfaces.wsdl</SchemaFileLocation>
+        <SelectedSubProcess>
+            <row>
+                <SubProcessDisplayNameCol>/Processes/StarterProcesses/ActualizaPortalOpenCloud</SubProcessDisplayNameCol>
+                <SubProcessHiddenNameCol>/Processes/StarterProcesses/ActualizaPortalOpenCloud.process</SubProcessHiddenNameCol>
+            </row>
+            <row>
+                <SubProcessDisplayNameCol>/Processes/StarterProcesses/HPSCAProvisioning</SubProcessDisplayNameCol>
+                <SubProcessHiddenNameCol>/Processes/StarterProcesses/HPSCAProvisioning.process</SubProcessHiddenNameCol>
+            </row>
+        </SelectedSubProcess>
+    </config>
+</BWSharedResource>

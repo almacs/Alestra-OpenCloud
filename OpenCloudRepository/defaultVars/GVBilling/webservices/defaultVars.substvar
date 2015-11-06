@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>IP_PORT</name>
+			<value>http://172.26.26.121:64302</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854481</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>password</name>
+			<value>ALESTRA_WS</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854481</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>username</name>
+			<value>ALESTRA_WS</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854482</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

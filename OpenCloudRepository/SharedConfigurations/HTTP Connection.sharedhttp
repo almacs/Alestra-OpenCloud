@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns0:httpSharedResource xmlns:ns0="www.tibco.com/shared/HTTPConnection">
+    <config>
+        <Host>%%OpenCloudWS/host%%</Host>
+        <serverType>HttpComponent</serverType>
+        <HttpConnectionProperties>
+            <row>
+                <PropertyName>uriEncoding</PropertyName>
+                <PropertyValue/>
+                <PropertyDefaultValue/>
+            </row>
+            <row>
+                <PropertyName>compressableMimeType</PropertyName>
+                <PropertyValue/>
+                <PropertyDefaultValue>text/html,text/xml,text/plain</PropertyDefaultValue>
+            </row>
+            <row>
+                <PropertyName>compression</PropertyName>
+                <PropertyValue/>
+                <PropertyDefaultValue>off</PropertyDefaultValue>
+            </row>
+            <row>
+                <PropertyName>connectionTimeOut (ms)</PropertyName>
+                <PropertyValue/>
+                <PropertyDefaultValue>60000</PropertyDefaultValue>
+            </row>
+        </HttpConnectionProperties>
+        <Port>%%OpenCloudWS/port%%</Port>
+        <useSsl>false</useSsl>
+        <ns1:ssl xmlns:ns1="http://www.tibco.com/xmlns/aemeta/services/2002">
+            <ns1:strongCipherSuitesOnly>true</ns1:strongCipherSuitesOnly>
+            <ns1:requiresClientAuthentication>true</ns1:requiresClientAuthentication>
+            <ns1:cert isRef="true">/Certificates/.folder</ns1:cert>
+        </ns1:ssl>
+    </config>
+</ns0:httpSharedResource>

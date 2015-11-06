@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://tempuri.org/" xmlns:ns12="http://xmlns.example.com/unique/default/namespace/1103228635369" xmlns:pfx="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" schemaLocation="/Schemas/OpenCloud/OpenCloud.xsd"/>
+    <wsdl:import namespace="http://tempuri.org/" location="/Schemas/Imports/PortalOpenCloud/FachadaServicios.wsdl"/>
+    <pd:name>Processes/StarterProcesses/ActualizaPortalOpenCloud.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:ActualizaPortalOpenCloudRequest"/>
+    <pd:startX>36</pd:startX>
+    <pd:startY>166</pd:startY>
+    <pd:returnBindings>
+        <pfx:ActualizaPortalOpenCloudResponse>
+            <pfx:Estatus>
+                <xsl:value-of select="$Variable0/root/Estatus"/>
+            </pfx:Estatus>
+        </pfx:ActualizaPortalOpenCloudResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:ActualizaPortalOpenCloudResponse"/>
+    <pd:endX>1436</pd:endX>
+    <pd:endY>170</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx:ActualizaPortalOpenCloudFault"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <Variable0>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="Estatus" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Variable0>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1446740679819</pd:targetNamespace>
+    <pd:activity name="CallPortalAprovisionaProyecto">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>695</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <service>pfx2:FachadaServicios</service>
+            <servicePort>FachadaServiciosSoap</servicePort>
+            <operation>AprovisionaProyecto</operation>
+            <soapAction>http://tempuri.org/AprovisionaProyecto</soapAction>
+            <endpointURL>http://mga-vm43/wsECCOpenCloud/FachadaServicios.asmx</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:AprovisionaProyecto>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account">
+                        <pfx2:bill_account>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account"/>
+                        </pfx2:bill_account>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:OrdenSiebel">
+                        <pfx2:OrdenSiebel>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:OrdenSiebel"/>
+                        </pfx2:OrdenSiebel>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Mensaje">
+                        <pfx2:Mensaje>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Mensaje"/>
+                        </pfx2:Mensaje>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:IDCSA">
+                        <pfx2:IDCSA>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:IDCSA"/>
+                        </pfx2:IDCSA>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:IDTIBCO">
+                        <pfx2:IDTIBCO>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:IDTIBCO"/>
+                        </pfx2:IDTIBCO>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Usuario">
+                        <pfx2:Usuario>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Usuario"/>
+                        </pfx2:Usuario>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Clave">
+                        <pfx2:Clave>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Clave"/>
+                        </pfx2:Clave>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Zona">
+                        <pfx2:zona>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Zona"/>
+                        </pfx2:zona>
+                    </xsl:if>
+                </pfx2:AprovisionaProyecto>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>402</pd:x>
+        <pd:y>166</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>878</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Estatus>
+                    <xsl:value-of select="$CallPortalAprovisionaProyecto/outputMessage/pfx2:AprovisionaProyectoResponse/pfx2:AprovisionaProyectoResult"/>
+                </Estatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallPortalActualizaOrden">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>696</pd:x>
+        <pd:y>164</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <service>pfx2:FachadaServicios</service>
+            <servicePort>FachadaServiciosSoap</servicePort>
+            <operation>ActualizaOrden</operation>
+            <soapAction>http://tempuri.org/ActualizaOrden</soapAction>
+            <endpointURL>http://mga-vm43/wsECCOpenCloud/FachadaServicios.asmx</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:ActualizaOrden>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account">
+                        <pfx2:bill_account>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account"/>
+                        </pfx2:bill_account>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:OrdenSiebel">
+                        <pfx2:OrdenSiebel>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:OrdenSiebel"/>
+                        </pfx2:OrdenSiebel>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Mensaje">
+                        <pfx2:Mensaje>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Mensaje"/>
+                        </pfx2:Mensaje>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Estatus">
+                        <pfx2:estatus>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Estatus"/>
+                        </pfx2:estatus>
+                    </xsl:if>
+                </pfx2:ActualizaOrden>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>876</pd:x>
+        <pd:y>171</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Estatus>
+                    <xsl:value-of select="$CallPortalActualizaOrden/outputMessage/pfx2:ActualizaOrdenResponse/pfx2:ActualizaOrdenResult"/>
+                </Estatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallPortalBloqueaCliente">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>702</pd:x>
+        <pd:y>270</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <service>pfx2:FachadaServicios</service>
+            <servicePort>FachadaServiciosSoap</servicePort>
+            <operation>BloqueaCliente</operation>
+            <soapAction>http://tempuri.org/BloqueaCliente</soapAction>
+            <endpointURL>http://mga-vm43/wsECCOpenCloud/FachadaServicios.asmx</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:BloqueaCliente>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account">
+                        <pfx2:bill_account>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account"/>
+                        </pfx2:bill_account>
+                    </xsl:if>
+                </pfx2:BloqueaCliente>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-2">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>876</pd:x>
+        <pd:y>264</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Estatus>
+                    <xsl:value-of select="$CallPortalBloqueaCliente/outputMessage/pfx2:BloqueaClienteResponse/pfx2:BloqueaClienteResult"/>
+                </Estatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallPortalDesbloqueaCliente">
+        <pd:type>com.tibco.plugin.soap.SOAPSendReceiveActivity</pd:type>
+        <pd:resourceType>ae.activities.SOAPSendReceiveUI</pd:resourceType>
+        <pd:x>709</pd:x>
+        <pd:y>379</pd:y>
+        <config>
+            <timeout>0</timeout>
+            <soapAttachmentStyle>SwA</soapAttachmentStyle>
+            <service>pfx2:FachadaServicios</service>
+            <servicePort>FachadaServiciosSoap</servicePort>
+            <operation>DesbloqueaCliente</operation>
+            <soapAction>http://tempuri.org/DesbloqueaCliente</soapAction>
+            <endpointURL>http://mga-vm43/wsECCOpenCloud/FachadaServicios.asmx</endpointURL>
+        </config>
+        <pd:inputBindings>
+            <inputMessage>
+                <pfx2:DesbloqueaCliente>
+                    <xsl:if test="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account">
+                        <pfx2:bill_account>
+                            <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:bill_account"/>
+                        </pfx2:bill_account>
+                    </xsl:if>
+                </pfx2:DesbloqueaCliente>
+            </inputMessage>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-3">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>880</pd:x>
+        <pd:y>382</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Estatus>
+                    <xsl:value-of select="$CallPortalDesbloqueaCliente/outputMessage/pfx2:DesbloqueaClienteResponse/pfx2:DesbloqueaClienteResult"/>
+                </Estatus>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="StarterLogger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>162</pd:x>
+        <pd:y>165</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="1"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GVUtilityServices/Logging/DEBUG"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="'Process/StarterProcesses/ActualizaPortalOpenCloud'"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  $Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SO_ID,&quot;||&quot;,$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SI_ID)"/>
+                </ns12:BusinessReferenceID>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>282</pd:x>
+        <pd:y>166</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SO_ID"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Start/pfx:ActualizaPortalOpenCloudRequest,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Project_ID"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="'Request'"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent-2">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1163</pd:x>
+        <pd:y>169</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SO_ID"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Variable0/root/Estatus,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Project_ID"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Response&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="EndLogger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1292</pd:x>
+        <pd:y>169</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="1"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GVUtilityServices/Logging/DEBUG"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="concat('End of ActualizaPortalOpenCloud. Accion: ', $Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion)"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="'Processes/StarterProcesses/ActualizaPortalOpenCloud'"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  $Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SO_ID,&quot;||&quot;,$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SI_ID)"/>
+                </ns12:BusinessReferenceID>
+                <ns12:FlexField1>
+                    <xsl:value-of select="concat(&quot;Web Service Response:: &quot;,$Variable0/root/Estatus)"/>
+                </ns12:FlexField1>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error Logger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>229</pd:x>
+        <pd:y>521</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="'2'"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/GVUtilityServices/Logging/ERROR"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="&quot;Error at ActualizaPortalOpenCloud&quot;"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="&quot;ActualizaPortalOpenCloud&quot;"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  $Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SO_ID,&quot;||&quot;,&quot;SI_ID=&quot;,$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SI_ID)"/>
+                </ns12:BusinessReferenceID>
+                <ns12:MsgContents>
+                    <xsl:value-of select="tib:render-xml($Catch)"/>
+                </ns12:MsgContents>
+                <ns12:FlexField1>
+                    <xsl:value-of select="tib:render-xml($Catch)"/>
+                </ns12:FlexField1>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>396</pd:x>
+        <pd:y>518</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SO_ID"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="concat(&quot;ActualizaPortalOpenCloud. Accion: &quot;, $Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion)"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Catch,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Project_ID"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Error&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>57</pd:x>
+        <pd:y>518</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>574</pd:x>
+        <pd:y>517</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>StarterLogger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CallPortalAprovisionaProyecto</pd:to>
+        <pd:xpathDescription>AprovisionaProyecto</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion = 'AprovisionaProyecto'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortalAprovisionaProyecto</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CallPortalActualizaOrden</pd:to>
+        <pd:xpathDescription>ActualizaOrden</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion = 'ActualizaOrden'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortalActualizaOrden</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CallPortalBloqueaCliente</pd:to>
+        <pd:xpathDescription>BloqueaCliente</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion = 'BloqueaCliente'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortalBloqueaCliente</pd:from>
+        <pd:to>Assign-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-2</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CallPortalDesbloqueaCliente</pd:to>
+        <pd:xpathDescription>DesbloqueaCliente</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:ActualizaPortalOpenCloudRequest/pfx:Accion = 'DesbloqueaCliente'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallPortalDesbloqueaCliente</pd:from>
+        <pd:to>Assign-3</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-3</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>StarterLogger</pd:from>
+        <pd:to>WriteEvent</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent-2</pd:from>
+        <pd:to>EndLogger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>EndLogger</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Error Logger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Logger</pd:from>
+        <pd:to>WriteEvent-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent-1</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

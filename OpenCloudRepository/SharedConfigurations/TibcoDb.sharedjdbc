@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>TibcoDb</name>
+    <resourceType>ae.shared.JDBCSharedResource</resourceType>
+    <config>
+        <driver>tibcosoftwareinc.jdbc.oracle.OracleDriver</driver>
+        <maxConnections>10</maxConnections>
+        <loginTimeout>0</loginTimeout>
+        <connectionType>JDBC</connectionType>
+        <UseSharedJndiConfig>false</UseSharedJndiConfig>
+        <location>%%GVSharedConnection/JDBCConnection/URL%%</location>
+        <user>%%GVSharedConnection/JDBCConnection/user%%</user>
+        <password>%%GVSharedConnection/JDBCConnection/password%%</password>
+    </config>
+</BWSharedResource>

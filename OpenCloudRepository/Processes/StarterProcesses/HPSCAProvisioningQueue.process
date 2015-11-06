@@ -1,0 +1,920 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns12="http://xmlns.example.com/unique/default/namespace/1103228635369" xmlns:pfx="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" schemaLocation="/Schemas/OpenCloud/OpenCloud.xsd"/>
+    <pd:name>Processes/StarterProcesses/HPSCAProvisioningQueue.process</pd:name>
+    <pd:startName>JMS Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <pfx:HPSCAProvisioningResponse>
+            <pfx:IDCSA>
+                <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+            </pfx:IDCSA>
+            <pfx:estatus>
+                <xsl:value-of select="$Variable0/root/errorCode"/>
+            </pfx:estatus>
+            <pfx:descripcion>
+                <xsl:value-of select="$Variable0/root/errorDescription"/>
+            </pfx:descripcion>
+            <pfx:IDTIBCO>
+                <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+            </pfx:IDTIBCO>
+        </pfx:HPSCAProvisioningResponse>
+    </pd:returnBindings>
+    <pd:starter name="JMS Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>65</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%GVCompanyName%%.%%GVEnv%%.%%GVInterface%%.%%GVJMS/QueueName/HPSCA%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedConfigurations/ALHPSCAJMSCon.sharedjmscon</ConnectionReference>
+            <OutDataxsdString ref="pfx:HPSCAProvisioningRequest"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:HPSCAProvisioningResponse"/>
+    <pd:endX>1269</pd:endX>
+    <pd:endY>216</pd:endY>
+    <pd:errorSchemas>
+        <Schema1 ref="pfx:HPSCAProvisioningFault"/>
+    </pd:errorSchemas>
+    <pd:processVariables>
+        <Variable0>
+            <xsd:element name="root">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="errorCode" type="xsd:string"/>
+                        <xsd:element name="errorDescription" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </Variable0>
+    </pd:processVariables>
+    <pd:targetNamespace>http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd</pd:targetNamespace>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>433</pd:x>
+        <pd:y>410</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($_error)"/>
+                </message>
+                <xsl:if test="$_error/ns1:ErrorReport/MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>52</pd:x>
+        <pd:y>409</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="CreacionIAAS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>644</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Processes/SubProcesses/CreacionIAAS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <BillAccount>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:BillAccount"/>
+                </BillAccount>
+                <LlaveServicio>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:LlaveServicio"/>
+                </LlaveServicio>
+                <Nombre>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Nombre"/>
+                </Nombre>
+                <vCPU>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vCPU"/>
+                </vCPU>
+                <vMemory>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vMemoria"/>
+                </vMemory>
+                <vStorage>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vStorage"/>
+                </vStorage>
+                <vBandWidth>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vBandWidth"/>
+                </vBandWidth>
+                <Datacenter>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Datacenter"/>
+                </Datacenter>
+                <IDTIBCO>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+                </IDTIBCO>
+                <RunName>
+                    <xsl:value-of select="'run1'"/>
+                </RunName>
+                <SO_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <Project_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </Project_ID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="IncrementoIAAS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>637</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <processName>/Processes/SubProcesses/IncrementoIAAS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <IDCSA>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+                </IDCSA>
+                <vCPU>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vCPU"/>
+                </vCPU>
+                <vMemory>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vMemoria"/>
+                </vMemory>
+                <vStorage>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vStorage"/>
+                </vStorage>
+                <vBandWidth>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vBandWidth"/>
+                </vBandWidth>
+                <IDTIBCO>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+                </IDTIBCO>
+                <RunName>
+                    <xsl:value-of select="'run1'"/>
+                </RunName>
+                <SO_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <Project_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </Project_ID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="DecrementoIAAS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>632</pd:x>
+        <pd:y>206</pd:y>
+        <config>
+            <processName>/Processes/SubProcesses/DecrementoIAAS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <IDCSA>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+                </IDCSA>
+                <vCPU>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vCPU"/>
+                </vCPU>
+                <vMemory>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vMemoria"/>
+                </vMemory>
+                <vStorage>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vStorage"/>
+                </vStorage>
+                <vBandWidth>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:vBandWidth"/>
+                </vBandWidth>
+                <IDTIBCO>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+                </IDTIBCO>
+                <RunName>
+                    <xsl:value-of select="'run1'"/>
+                </RunName>
+                <SO_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <Project_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </Project_ID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="BloqueoIAAS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>634</pd:x>
+        <pd:y>284</pd:y>
+        <config>
+            <processName>/Processes/SubProcesses/BloqueoIAAS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <IDCSA>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+                </IDCSA>
+                <IDTIBCO>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+                </IDTIBCO>
+                <RunName>
+                    <xsl:value-of select="'run1'"/>
+                </RunName>
+                <SO_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <Project_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </Project_ID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="BajaIAAS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>628</pd:x>
+        <pd:y>472</pd:y>
+        <config>
+            <processName>/Processes/SubProcesses/BajaIAAS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <IDCSA>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+                </IDCSA>
+                <IDTIBCO>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+                </IDTIBCO>
+                <RunName>
+                    <xsl:value-of select="'run1'"/>
+                </RunName>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SO_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <Project_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </Project_ID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>384</pd:x>
+        <pd:y>171</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>880</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of select="'0'"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of select="'Success'"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="DesbloqueoIAAS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>634</pd:x>
+        <pd:y>377</pd:y>
+        <config>
+            <processName>/Processes/SubProcesses/DesbloqueoIAAS.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <IDCSA>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:IDCSA"/>
+                </IDCSA>
+                <IDTIBCO>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:DelayedReleaseID"/>
+                </IDTIBCO>
+                <RunName>
+                    <xsl:value-of select="'run1'"/>
+                </RunName>
+                <SO_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <Project_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </Project_ID>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate-Error-1">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>306</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="'HPSCAProvisioningQueue Error. Debe enviar una accion valida. Las posibles acciones son: Creacion de Iaas, Incremento de Iaas, Decremento de Iaas, Bloqueo de IaaS, Desbloqueo de IaaS, Baja de IaaS'"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="1"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="StarterLogger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>67</pd:x>
+        <pd:y>172</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="1"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/GVUtilityServices/Logging/DEBUG"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="'HPSCAProvisioningQueue'"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="'Processes/StarterProcesses/HPSCAProvisioningQueue'"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  $JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID,&quot;||&quot;,'Project_Id::',  $JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID)"/>
+                </ns12:BusinessReferenceID>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>194</pd:x>
+        <pd:y>171</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="'HPSCAProvisioningQueue'"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($JMS-Queue-Receiver,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Request&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent-2">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1039</pd:x>
+        <pd:y>217</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="&quot;HPSCAProvisioningQueue&quot;"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Variable0,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Response&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="EndLogger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1151</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="1"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/GVUtilityServices/Logging/DEBUG"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="&quot;End of HPSCAProvisioningQueue&quot;"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="'/Processes/StarterProcesses/HPSCAProvisioningQueue'"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;, $JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID,&quot;||&quot;,'Project_ID', $JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID)"/>
+                </ns12:BusinessReferenceID>
+                <ns12:FlexField1>
+                    <xsl:value-of select="concat(&quot;Web Service Response:: &quot;,$Variable0)"/>
+                </ns12:FlexField1>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error Logger">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>307</pd:x>
+        <pd:y>410</pd:y>
+        <config>
+            <processName>/Utilities/Logging/LoggerProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Event>
+                <ns12:EventCode>
+                    <xsl:value-of select="'2'"/>
+                </ns12:EventCode>
+                <ns12:EventSeverity>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/GVUtilityServices/Logging/ERROR"/>
+                </ns12:EventSeverity>
+                <ns12:EventTimeStamp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns12:EventTimeStamp>
+                <ns12:EventDescription>
+                    <xsl:value-of select="&quot;Error at HPSCAProvisioningQueue&quot;"/>
+                </ns12:EventDescription>
+                <ns12:ProcessName>
+                    <xsl:value-of select="&quot;HPSCAProvisioningQueue&quot;"/>
+                </ns12:ProcessName>
+                <ns12:BusinessReferenceID>
+                    <xsl:value-of select="concat(&quot;SO Unique Id=&quot;,  $JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID,&quot;||&quot;,&quot;SI_ID=&quot;,$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID)"/>
+                </ns12:BusinessReferenceID>
+                <ns12:MsgContents>
+                    <xsl:value-of select="tib:render-xml($_error)"/>
+                </ns12:MsgContents>
+                <ns12:FlexField1>
+                    <xsl:value-of select="tib:render-xml($_error)"/>
+                </ns12:FlexField1>
+            </ns12:Event>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WriteEvent-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>171</pd:x>
+        <pd:y>412</pd:y>
+        <config>
+            <processName>/Utilities/WriteWSDLEvents/writeWSDLEvents.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <SO_UNIQ_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SO_ID"/>
+                </SO_UNIQ_ID>
+                <SI_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SI_ID"/>
+                </SI_ID>
+                <SE_ID>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:SE_ID"/>
+                </SE_ID>
+                <ElementType>
+                    <xsl:value-of select="&quot;CeaseContract&quot;"/>
+                </ElementType>
+                <fileInput>
+                    <xsl:value-of select="tib:render-xml($Catch,true(), true())"/>
+                </fileInput>
+                <projectId>
+                    <xsl:value-of select="$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Project_ID"/>
+                </projectId>
+                <inputType>
+                    <xsl:value-of select="&quot;Error&quot;"/>
+                </inputType>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-1">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>875</pd:x>
+        <pd:y>140</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'0'"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'Success'"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-2">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>878</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'0'"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'Success'"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-3">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>883</pd:x>
+        <pd:y>305</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'0'"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'Success'"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-4">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>872</pd:x>
+        <pd:y>388</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'0'"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'Success'"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign-5">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>876</pd:x>
+        <pd:y>482</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'0'"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'Success'"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Initialize">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>170</pd:y>
+        <config>
+            <variableName>Variable0</variableName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorCode>
+                    <xsl:value-of select="&quot;0&quot;"/>
+                </errorCode>
+                <errorDescription>
+                    <xsl:value-of select="&quot;Success&quot;"/>
+                </errorDescription>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMS Queue Receiver</pd:from>
+        <pd:to>StarterLogger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>WriteEvent-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CreacionIAAS</pd:to>
+        <pd:xpathDescription>Creacion</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Accion = 'Creacion de Iaas'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>IncrementoIAAS</pd:to>
+        <pd:xpathDescription>Incremento</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Accion = 'Incremento de Iaas'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>DecrementoIAAS</pd:to>
+        <pd:xpathDescription>Decremento</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Accion = 'Decremento de Iaas'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>BloqueoIAAS</pd:to>
+        <pd:xpathDescription>Bloqueo</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Accion = 'Bloqueo de IaaS'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>BajaIAAS</pd:to>
+        <pd:xpathDescription>Baja</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Accion = 'Baja de IaaS'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CreacionIAAS</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>IncrementoIAAS</pd:from>
+        <pd:to>Assign-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DecrementoIAAS</pd:from>
+        <pd:to>Assign-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BloqueoIAAS</pd:from>
+        <pd:to>Assign-3</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BajaIAAS</pd:from>
+        <pd:to>Assign-5</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>DesbloqueoIAAS</pd:to>
+        <pd:xpathDescription>Desbloqueo</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Receiver/pfx2:ActivityOutput/Body/pfx:HPSCAProvisioningRequest/pfx:Accion = 'Desbloqueo de IaaS'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DesbloqueoIAAS</pd:from>
+        <pd:to>Assign-4</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Generate-Error-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>StarterLogger</pd:from>
+        <pd:to>WriteEvent</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent</pd:from>
+        <pd:to>Initialize</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent-2</pd:from>
+        <pd:to>EndLogger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>EndLogger</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WriteEvent-1</pd:from>
+        <pd:to>Error Logger</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error Logger</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-1</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-2</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-3</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-4</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign-5</pd:from>
+        <pd:to>WriteEvent-2</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Initialize</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

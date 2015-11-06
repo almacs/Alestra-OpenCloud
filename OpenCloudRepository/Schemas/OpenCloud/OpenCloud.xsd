@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:ns="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:simpleType name="ErrorCodeType">
+		<xs:restriction base="xs:integer"/>
+	</xs:simpleType>
+	<xs:simpleType name="ErrorMessageType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+
+	<!-- START GenericFault  -->
+	<xs:complexType name="GenericFaultType">
+		<xs:sequence>
+			<xs:element name="ErrorCode" type="ns:ErrorCodeType"/>
+			<xs:element name="ErrorMessage" type="ns:ErrorMessageType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ReceiveHPSCAReplyRequestType">
+		<xs:all>
+			<xs:element name="IDCSA" type="xs:string" minOccurs="0"/>
+			<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+			<xs:element name="clave" type="xs:string" minOccurs="0"/>
+			<xs:element name="zona" type="xs:string" minOccurs="0"/>
+			<xs:element name="estatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="descripcion" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDTIBCO" type="xs:string" minOccurs="0"/>
+			<xs:element name="FLEXFIELD1" type="xs:string" minOccurs="0"/>
+			<xs:element name="FLEXFIELD2" type="xs:string" minOccurs="0"/>
+			<xs:element name="FLEXFIELD3" type="xs:string" minOccurs="0"/>
+			<xs:element name="FLEXFIELD4" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ReceiveHPSCAReplyResponseType">
+		<xs:sequence>
+			<xs:element name="IDCSA" type="xs:string"/>
+			<xs:element name="estatus" type="xs:integer"/>
+			<xs:element name="descripcion" type="xs:string"/>
+			<xs:element name="IDTIBCO" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ReceiveHPSCAReplyRequest" type="ns:ReceiveHPSCAReplyRequestType"/>
+	<xs:element name="ReceiveHPSCAReplyResponse" type="ns:ReceiveHPSCAReplyResponseType"/>
+	<xs:element name="ReceiveHPSCAReplyFault" type="ns:GenericFaultType"/>
+	<xs:complexType name="HPSCAProvisioningRequestType">
+		<xs:all>
+			<xs:element name="Accion" type="xs:string" minOccurs="0"/>
+			<xs:element name="Orden" type="xs:string" minOccurs="0"/>
+			<xs:element name="Proyecto" type="xs:string" minOccurs="0"/>
+			<xs:element name="DelayedReleaseID" type="xs:string" minOccurs="0"/>
+			<xs:element name="BillAccount" type="xs:string" minOccurs="0"/>
+			<xs:element name="LlaveServicio" type="xs:string" minOccurs="0"/>
+			<xs:element name="Nombre" type="xs:string" minOccurs="0"/>
+			<xs:element name="vCPU" type="xs:string" minOccurs="0"/>
+			<xs:element name="vMemoria" type="xs:string" minOccurs="0"/>
+			<xs:element name="vStorage" type="xs:string" minOccurs="0"/>
+			<xs:element name="vBandWidth" type="xs:string" minOccurs="0"/>
+			<xs:element name="Datacenter" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDTIBCO" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDCSA" type="xs:string" minOccurs="0"/>
+			<xs:element name="SI_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="SO_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="SE_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="Project_ID" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="HPSCAProvisioningResponseType">
+		<xs:sequence>
+			<xs:element name="IDCSA" type="xs:string"/>
+			<xs:element name="estatus" type="xs:string"/>
+			<xs:element name="descripcion" type="xs:string"/>
+			<xs:element name="IDTIBCO" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="HPSCAProvisioningRequest" type="ns:HPSCAProvisioningRequestType"/>
+	<xs:element name="HPSCAProvisioningResponse" type="ns:HPSCAProvisioningResponseType"/>
+	<xs:element name="HPSCAProvisioningFault" type="ns:GenericFaultType"/>
+	<xs:complexType name="ActualizaPortalOpenCloudRequestType">
+		<xs:all>
+			<xs:element name="Accion" type="xs:string" minOccurs="0"/>
+			<xs:element name="bill_account" type="xs:string" minOccurs="0"/>
+			<xs:element name="OrdenSiebel" type="xs:string" minOccurs="0"/>
+			<xs:element name="Mensaje" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDCSA" type="xs:string" minOccurs="0"/>
+			<xs:element name="IDTIBCO" type="xs:string" minOccurs="0"/>
+			<xs:element name="Usuario" type="xs:string" minOccurs="0"/>
+			<xs:element name="Clave" type="xs:string" minOccurs="0"/>
+			<xs:element name="Zona" type="xs:string" minOccurs="0"/>
+			<xs:element name="Estatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="SI_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="SO_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="SE_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="Project_ID" type="xs:string" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ActualizaPortalOpenCloudResponseType">
+		<xs:sequence>
+			<xs:element name="Estatus" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="ActualizaPortalOpenCloudRequest" type="ns:ActualizaPortalOpenCloudRequestType"/>
+	<xs:element name="ActualizaPortalOpenCloudResponse" type="ns:ActualizaPortalOpenCloudResponseType"/>
+	<xs:element name="ActualizaPortalOpenCloudFault" type="ns:GenericFaultType"/>
+</xs:schema>

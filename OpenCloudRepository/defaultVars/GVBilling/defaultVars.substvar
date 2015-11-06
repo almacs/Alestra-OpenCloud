@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>DBURL-C1</name>
+			<value>jdbc:tibcosoftwareinc:oracle://172.26.26.121:1521;SID=RBMu12db</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854481</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>#!WgTp/8LKRbsM/p9LyjEKkClxkPOydwOMDCDR4fpEtFQQqjjvS9+0yg==</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Password</type>
+			<modTime>1444868854481</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UserName</name>
+			<value>geneva_custom</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854481</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

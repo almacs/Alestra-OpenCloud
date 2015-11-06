@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd">
+    <import namespace="http://www.tibco.com/schemas/OpenCloud/SharedResources/Schema.xsd" location="../Schemas/OpenCloud/OpenCloud.xsd"/>
+    <message name="ReceiveHPSCAReply_input">
+        <part name="Input" element="tns:ReceiveHPSCAReplyRequest"/>
+    </message>
+    <message name="ReceiveHPSCAReply_output">
+        <part name="Output" element="tns:ReceiveHPSCAReplyResponse"/>
+    </message>
+    <message name="ReceiveHPSCAReply_fault">
+        <part name="Fault" element="tns:ReceiveHPSCAReplyFault"/>
+    </message>
+    <portType name="PortType">
+        <operation name="ReceiveHPSCAReply">
+            <input message="tns:ReceiveHPSCAReply_input"/>
+            <output message="tns:ReceiveHPSCAReply_output"/>
+            <fault name="Fault" message="tns:ReceiveHPSCAReply_fault"/>
+        </operation>
+    </portType>
+</definitions>

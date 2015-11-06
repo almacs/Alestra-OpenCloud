@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>databaseURL</name>
+			<value>jdbc:mysql://172.26.50.200:13306/twingodb</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854470</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>password</name>
+			<value>#!p7XGZlpWOzGCNoijpqh63suVPgCV/Iaerserlx09JyU=</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Password</type>
+			<modTime>1444868854471</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>user</name>
+			<value>tibuat01</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854471</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

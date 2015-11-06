@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://xmlns.example.com/unique/default/namespace/1103228635369" xmlns:pfx="http://www.tibco.com/pe/DeployedVarsType">
+    <xsd:import namespace="http://xmlns.example.com/unique/default/namespace/1103228635369" schemaLocation="/Utilities/Logging/LogEvent.xsd"/>
+    <pd:name>Utilities/Logging/LoggerProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:Event"/>
+    <pd:startX>59</pd:startX>
+    <pd:startY>147</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>531</pd:endX>
+    <pd:endY>151</pd:endY>
+    <pd:errorSchemas>
+        <error ref="pfx2:Event"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1387457425155</pd:targetNamespace>
+    <pd:activity name="ErrorLog-Event">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>443</pd:x>
+        <pd:y>244</pd:y>
+        <config>
+            <role>User</role>
+            <suppressHeader>false</suppressHeader>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;\n Error in File Logger Process: &quot;, $CatchAllErrors/exceptiondata)"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="WritetoLogFile">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:description>Write to Log file by suppressing header of XML string using render-xml function.</pd:description>
+        <pd:x>337</pd:x>
+        <pd:y>169</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <append>true</append>
+            <createMissingDirectories>true</createMissingDirectories>
+        </config>
+        <pd:inputBindings>
+            <ns2:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($_globalVariables/pfx:GlobalVariables/GVUtilityServices/Logging/LogFileName,$_globalVariables/pfx:GlobalVariables/GVInterface,'_',tib:format-date('MMddyyyy', current-date()),&quot;.log&quot;)"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="tib:render-xml($ChangeTimestamp/root/pfx2:Event, true(),true() )"/>
+                </textContent>
+                <addLineSeparator>
+                    <xsl:value-of select="1"/>
+                </addLineSeparator>
+                <encoding>
+                    <xsl:value-of select="$_globalVariables/pfx:GlobalVariables/GVUtilityServices/Logging/Encoding"/>
+                </encoding>
+            </ns2:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CatchAllErrors">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:description>This receives control of execution when an unhandled exception occurs.</pd:description>
+        <pd:x>167</pd:x>
+        <pd:y>244</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ChangeTimestamp">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:description>Change date and time format</pd:description>
+        <pd:x>169</pd:x>
+        <pd:y>146</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx2:Event" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Start/pfx2:Event">
+                    <pfx2:Event>
+                        <pfx2:EventCode>
+                            <xsl:value-of select="pfx2:EventCode"/>
+                        </pfx2:EventCode>
+                        <pfx2:EventSeverity>
+                            <xsl:value-of select="if ($Start/pfx2:Event/pfx2:EventSeverity=1) then 'ERROR'  &#xA;else if ($Start/pfx2:Event/pfx2:EventSeverity=2) then 'WARNING'&#xA;else if ($Start/pfx2:Event/pfx2:EventSeverity=3) then  'INFO'&#xA;else 'DEBUG'"/>
+                        </pfx2:EventSeverity>
+                        <pfx2:EventTimeStamp>
+                            <xsl:value-of select="tib:format-dateTime('yyyy-MM-dd HH:mm:ss', current-dateTime())"/>
+                        </pfx2:EventTimeStamp>
+                        <pfx2:EventDescription>
+                            <xsl:value-of select="pfx2:EventDescription"/>
+                        </pfx2:EventDescription>
+                        <xsl:if test="exists(pfx2:MsgTrackingIDs)">
+                            <xsl:for-each select="pfx2:MsgTrackingIDs">
+                                <pfx2:MsgTrackingIDs>
+                                    <xsl:value-of select="."/>
+                                </pfx2:MsgTrackingIDs>
+                            </xsl:for-each>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:OrginalMsgSubject)">
+                            <pfx2:OrginalMsgSubject>
+                                <xsl:value-of select="pfx2:OrginalMsgSubject"/>
+                            </pfx2:OrginalMsgSubject>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:ProcessName)">
+                            <pfx2:ProcessName>
+                                <xsl:value-of select="pfx2:ProcessName"/>
+                            </pfx2:ProcessName>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:MsgSequenceNumber)">
+                            <pfx2:MsgSequenceNumber>
+                                <xsl:value-of select="pfx2:MsgSequenceNumber"/>
+                            </pfx2:MsgSequenceNumber>
+                        </xsl:if>
+                        <xsl:for-each select="pfx2:BusinessReferenceID">
+                            <pfx2:BusinessReferenceID>
+                                <xsl:value-of select="."/>
+                            </pfx2:BusinessReferenceID>
+                        </xsl:for-each>
+                        <xsl:if test="exists(pfx2:MsgContents)">
+                            <pfx2:MsgContents>
+                                <xsl:value-of select="pfx2:MsgContents"/>
+                            </pfx2:MsgContents>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:TibcoStackTrace)">
+                            <pfx2:TibcoStackTrace>
+                                <xsl:value-of select="pfx2:TibcoStackTrace"/>
+                            </pfx2:TibcoStackTrace>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:ElapsedTime)">
+                            <pfx2:ElapsedTime>
+                                <xsl:value-of select="pfx2:ElapsedTime"/>
+                            </pfx2:ElapsedTime>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField1)">
+                            <pfx2:FlexField1>
+                                <xsl:value-of select="pfx2:FlexField1"/>
+                            </pfx2:FlexField1>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField2)">
+                            <pfx2:FlexField2>
+                                <xsl:value-of select="pfx2:FlexField2"/>
+                            </pfx2:FlexField2>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField3)">
+                            <pfx2:FlexField3>
+                                <xsl:value-of select="pfx2:FlexField3"/>
+                            </pfx2:FlexField3>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField4)">
+                            <pfx2:FlexField4>
+                                <xsl:value-of select="pfx2:FlexField4"/>
+                            </pfx2:FlexField4>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField5)">
+                            <pfx2:FlexField5>
+                                <xsl:value-of select="pfx2:FlexField5"/>
+                            </pfx2:FlexField5>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField6)">
+                            <pfx2:FlexField6>
+                                <xsl:value-of select="pfx2:FlexField6"/>
+                            </pfx2:FlexField6>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField7)">
+                            <pfx2:FlexField7>
+                                <xsl:value-of select="pfx2:FlexField7"/>
+                            </pfx2:FlexField7>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField8)">
+                            <pfx2:FlexField8>
+                                <xsl:value-of select="pfx2:FlexField8"/>
+                            </pfx2:FlexField8>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField9)">
+                            <pfx2:FlexField9>
+                                <xsl:value-of select="pfx2:FlexField9"/>
+                            </pfx2:FlexField9>
+                        </xsl:if>
+                        <xsl:if test="exists(pfx2:FlexField10)">
+                            <pfx2:FlexField10>
+                                <xsl:value-of select="pfx2:FlexField10"/>
+                            </pfx2:FlexField10>
+                        </xsl:if>
+                    </pfx2:Event>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>259</pd:x>
+        <pd:y>0</pd:y>
+        <pd:width>184</pd:width>
+        <pd:height>140</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>errorLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:errorCondition>false()</pd:errorCondition>
+            <pd:suspendAfterErrorRetry>false</pd:suspendAfterErrorRetry>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>SendEventToQueue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>SendEventToQueue</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="SendEventToQueue">
+            <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+            <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+            <pd:description>Send Log Event to JMS Queue</pd:description>
+            <pd:x>340</pd:x>
+            <pd:y>64</pd:y>
+            <config>
+                <PermittedMessageType>XML Text</PermittedMessageType>
+                <SessionAttributes>
+                    <transacted>false</transacted>
+                    <acknowledgeMode>1</acknowledgeMode>
+                    <maxSessions>1</maxSessions>
+                    <destination>%%GVCompanyName%%.%%GVEnv%%.%%GVUtilityServices/Logging/LoggerQueue%%</destination>
+                </SessionAttributes>
+                <ConfigurableHeaders>
+                    <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                    <JMSExpiration>0</JMSExpiration>
+                    <JMSPriority>4</JMSPriority>
+                </ConfigurableHeaders>
+                <ConnectionReference>/SharedConfigurations/ErrorJMSConnection.sharedjmscon</ConnectionReference>
+                <InDataxsdString>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx2:Event"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </InDataxsdString>
+            </config>
+            <pd:inputBindings>
+                <ns3:ActivityInput>
+                    <Body>
+                        <root>
+                            <xsl:copy-of select="$ChangeTimestamp/root/pfx2:Event"/>
+                        </root>
+                    </Body>
+                </ns3:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>ErrorLog-Event</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>WritetoLogFile</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CatchAllErrors</pd:from>
+        <pd:to>ErrorLog-Event</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>ChangeTimestamp</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ChangeTimestamp</pd:from>
+        <pd:to>WritetoLogFile</pd:to>
+        <pd:xpathDescription>FILE</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ChangeTimestamp</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:xpathDescription>BUS</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>upper-case(tib:trim($_globalVariables/pfx:GlobalVariables/GVUtilityServices/Logging/LOG)) = 'BUS'</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

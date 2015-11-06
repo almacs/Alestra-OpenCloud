@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://xmlns.example.com/unique/default/namespace/1103228635369"
+	 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	 targetNamespace="http://xmlns.example.com/unique/default/namespace/1103228635369"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xsd:element name="EventDescription" type="xsd:string"/>
+	<xsd:element name="MsgTrackingIDs" type="xsd:string"/>
+	<xsd:element name="BusinessReferenceID" type="xsd:string"/>
+	<xsd:element name="MsgContents" type="xsd:string"/>
+	<xsd:element name="Event">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="EventCode" type="xsd:string"/>
+				<xsd:element name="EventSeverity" type="xsd:string"/>
+				<xsd:element ref="EventTimeStamp" minOccurs="0"/>
+				<xsd:element ref="EventDescription"/>
+				<xsd:element ref="MsgTrackingIDs" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="OrginalMsgSubject" minOccurs="0"/>
+				<xsd:element ref="ProcessName" minOccurs="0"/>
+				<xsd:element ref="MsgSequenceNumber" minOccurs="0"/>
+				<xsd:element ref="BusinessReferenceID" maxOccurs="unbounded"/>
+				<xsd:element ref="MsgContents" minOccurs="0"/>
+				<xsd:element ref="TibcoStackTrace" minOccurs="0"/>
+				<xsd:element ref="ElapsedTime" minOccurs="0"/>
+				<xsd:element ref="FlexField1" minOccurs="0"/>
+				<xsd:element ref="FlexField2" minOccurs="0"/>
+				<xsd:element ref="FlexField3" minOccurs="0"/>
+				<xsd:element ref="FlexField4" minOccurs="0"/>
+				<xsd:element ref="FlexField5" minOccurs="0"/>
+				<xsd:element ref="FlexField6" minOccurs="0"/>
+				<xsd:element ref="FlexField7" minOccurs="0"/>
+				<xsd:element ref="FlexField8" minOccurs="0"/>
+				<xsd:element ref="FlexField9" minOccurs="0"/>
+				<xsd:element ref="FlexField10" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="OrginalMsgSubject" type="xsd:string"/>
+	<xsd:element name="ProcessName" type="xsd:string"/>
+	<xsd:element name="EventTimeStamp" type="xsd:string"/>
+	<xsd:element name="ElapsedTime" type="xsd:string"/>
+	<xsd:element name="MsgSequenceNumber" type="xsd:string"/>
+	<xsd:element name="FlexField1" type="xsd:string"/>
+	<xsd:element name="FlexField2" type="xsd:string"/>
+	<xsd:element name="FlexField3" type="xsd:string"/>
+	<xsd:element name="FlexField4" type="xsd:string"/>
+	<xsd:element name="FlexField5" type="xsd:string"/>
+	<xsd:element name="FlexField6" type="xsd:string"/>
+	<xsd:element name="FlexField7" type="xsd:string"/>
+	<xsd:element name="FlexField8" type="xsd:string"/>
+	<xsd:element name="FlexField9" type="xsd:string"/>
+	<xsd:element name="FlexField10" type="xsd:string"/>
+	<xsd:element name="TibcoStackTrace" type="xsd:string"/>
+</xsd:schema>

@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>JDBCDriver</name>
+			<value>tibcosoftwareinc.jdbc.oracle.OracleDriver</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854469</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>swprouat</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854470</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>SchemaOwner</name>
+			<value>swpro</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854470</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>URL</name>
+			<value>jdbc:tibcosoftwareinc:oracle://172.26.50.85:1530;SID=UTIBIP01</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854470</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UserName</name>
+			<value>swpro</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1444868854470</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>
